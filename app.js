@@ -5,9 +5,9 @@ var morgan      = require('morgan');
 var mongoose    = require('mongoose');
 var passport  = require('passport');
 var config      = require('./config/database'); // get db config file
-var auth = require('./routes/auth');
-var posts = require('./routes/posts');
-var subscribe = require('./routes/subscribe');
+var auth = require('./routes/authRoutes');
+var posts = require('./routes/postsRoutes');
+var subscribe = require('./routes/subscribeRoutes');
 var helmet = require('helmet');
 var expressSession = require('express-session');
 var cookieSession = require('cookie-session');
@@ -66,7 +66,7 @@ app.use('/api/subs', subscribe);
 //error handling
 app.use(function (err, req, res, next) {
 	//console.error(err.stack)
-	res.status(406).send({success: false, msg: 'Unauthorized.'})
+	res.status(406).send({success: false, msg: 'Error Occurs.', error: err})
 })
 
 module.exports = app;

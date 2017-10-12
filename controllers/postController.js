@@ -85,7 +85,7 @@ exports.getAllFeeds = (req, res) => {
 
 exports.getPostbyImgId= (req, res) => {
 	Post
-		.find({'quote_pic':req.params.img})
+		.find({'quote_pic':req.params.imgId})
 		.populate('_creator')
 		.exec(function (err, entry) {
 			if(entry)

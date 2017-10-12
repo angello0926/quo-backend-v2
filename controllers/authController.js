@@ -32,7 +32,7 @@ exports.signup = (req, res) => {
 				return res.status(400).json({success: false, msg: 'Username already exists.'});
 			}
 			var token = jwt.encode(newUser, config.secret);
-			res.status(200).json({success: true, msg: 'Successful created new user.',token: 'JWT ' + token});
+			res.status(201).json({success: true, msg: 'Successful created new user.',token: 'JWT ' + token});
 		});
 	}
 };
