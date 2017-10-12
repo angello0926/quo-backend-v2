@@ -61,5 +61,17 @@ mongoose.connect(config.database);
 app.use('/api/auth', auth);
 app.use('/api/posts', posts);
 app.use('/api/subs', subscribe);
+
+
+//error handling
+app.use(function (err, req, res, next) {
+	//console.error(err.stack)
+	res.status(406).send({success: false, msg: 'Unauthorized.'})
+})
+
 module.exports = app;
+
+
+
+
 

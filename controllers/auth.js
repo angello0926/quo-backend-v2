@@ -18,7 +18,7 @@ aws.config.update({
 
 exports.signup = (req, res) => {
 	if (!req.body.email || !req.body.password) {
-		res.json({success: false, msg: 'Please pass email and password.'});
+		res.status(400).json({success: false, msg: 'Please pass email and password.'});
 	} else {
 		var newUser = new User({
 			email: req.body.email,
@@ -29,10 +29,10 @@ exports.signup = (req, res) => {
 		// save the user
 		newUser.save(function(err) {
 			if (err) {
-				return res.json({success: false, msg: 'Username already exists.'});
+				return res.status(400).json({success: false, msg: 'Username already exists.'});
 			}
 			var token = jwt.encode(newUser, config.secret);
-			res.json({success: true, msg: 'Successful created new user.',token: 'JWT ' + token});
+			res.status(200).json({success: true, msg: 'Successful created new user.',token: 'JWT ' + token});
 		});
 	}
 };
@@ -44,7 +44,7 @@ exports.authenticate = (req, res) => {
 	}, function(err, user) {
 		if (err) throw err;
 		if (!user) {
-			res.send({success: false, msg: 'Authentication failed. User not found.'});
+			res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
 		} else {
 			// check if password matches
 			user.comparePassword(req.body.password, function (err, isMatch) {
@@ -52,32 +52,18 @@ exports.authenticate = (req, res) => {
 					// if user is found and password is right create a token
 					var token = jwt.encode(user, config.secret);
 					// return the information including token as JSON
-					res.json({success: true, token: 'JWT ' + token});
+					res.status(200).json({success: true, token: 'JWT ' + token});
 				} else {
-					res.send({success: false, msg: 'Authentication failed. Wrong password.'});
+					res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
 				}
 			});
 		}
 	});
 };
 
-exports.memberinfo =(req, res) =>{
-	res.json({info: req.user});
+exports.memberinfo = (req, res) =>{
+	res.status(200).json({info: req.user});
 };
-
-var getToken = function (headers) {
-	if (headers && headers.authorization) {
-		var parted = headers.authorization.split(' ');
-		if (parted.length === 2) {
-			return parted[1];
-		} else {
-			return null;
-		}
-	} else {
-		return null;
-	}
-};
-
 
 exports.savepropic = (req, res) =>{
 	console.log(req.user);
@@ -105,9 +91,9 @@ exports.savepropic = (req, res) =>{
 };
 
 
-exports.editprofile =(req, res) =>{
+exports.editprofile = (req, res) => {
 	req.user.profile.name=req.body.name;
 	req.user.profile.about=req.body.about;
 	req.user.save();
-	res.json({user: req.user});
+	res.status(200).json({user: req.user});
 };
