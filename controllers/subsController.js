@@ -1,6 +1,7 @@
 const Post = require('../models/post');
 const User = require('../models/User');
-
+var mongoose    = require('mongoose');
+mongoose.Promise = Promise;  
 exports.followUser = (req, res) => {
 	User.findOne({'_id':req.user.id})
 	.then( doc => {

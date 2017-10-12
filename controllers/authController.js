@@ -7,7 +7,7 @@ var config      = require('../config/config');
 var uuid        = require('node-uuid');
 var aws        = require('aws-sdk');
 const s3 = new aws.S3();
-
+mongoose.Promise = Promise;  
 aws.config.update({
 	credentials: new aws.CognitoIdentityCredentials({
 		IdentityPoolId: 'us-east-1-foo-bar'
