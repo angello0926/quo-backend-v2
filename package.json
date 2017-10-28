@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "babel-node ./bin/www",
-    "test": "mocha test --compilers js:babel-register",
-    "build": "babel ./test/*Test.js --out-file ./test.js"
+    "test": "mocha test --require babel-register",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./test,./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "start": "npm run build && node ./dist/app.js"
   },
   "dependencies": {
     "aws-sdk": "^2.4.13",
@@ -42,6 +42,7 @@
     "eslint": "^4.9.0",
     "faker": "^4.1.0",
     "mocha": "^4.0.1",
+    "rimraf": "^2.6.2",
     "should": "^13.1.2",
     "supertest": "^3.0.0",
     "webpack": "^3.8.1"

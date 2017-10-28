@@ -1,4 +1,3 @@
-import app from '../app';
 import request from 'supertest';
 import faker from 'faker';
 import should from 'should';
