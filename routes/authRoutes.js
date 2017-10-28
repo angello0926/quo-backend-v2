@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
+import  express from 'express';
+let router = express.Router();
 
-const authController = require('../controllers/authController');
+import authController from '../controllers/authController';
 
 /* Create Account */
 router.post('/signup', authController.signup);

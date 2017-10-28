@@ -1,10 +1,11 @@
 
-var uuid        = require('node-uuid');
-var aws        = require('aws-sdk');
-var mongoose    = require('mongoose');
+import uuid        from 'node-uuid';
+import aws        from 'aws-sdk';
+import mongoose    from 'mongoose';
+import Post from '../models/post';
+import User from '../models/User';
+
 const s3 = new aws.S3();
-const Post = require('../models/post');
-const User = require('../models/User');
 mongoose.Promise = Promise;  
 //aws s3 config
 aws.config.update({

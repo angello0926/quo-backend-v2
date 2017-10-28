@@ -1,12 +1,11 @@
 
-var express = require('express');
-var router = express.Router();
-var passport  = require('passport');
-var jwt = require('jwt-simple');
+import express from 'express';
+import passport  from 'passport';
+import jwt from 'jwt-simple';
+import postController from '../controllers/postController';
+
+let router = express.Router();
 require('../config/passport')(passport);
-
-const postController = require('../controllers/postController');
-
 //Routes for creating posts
 router.post('/imageupload', passport.authenticate('jwt', { session: false}),postController.imageupload);
 router.post('/submit', passport.authenticate('jwt', { session: false}),postController.submission);

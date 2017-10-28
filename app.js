@@ -1,17 +1,18 @@
-var express     = require('express');
-var app         = express();
-var bodyParser  = require('body-parser');
-var morgan      = require('morgan');
-var mongoose    = require('mongoose');
-var passport  = require('passport');
-var config      = require('./config/config'); // get db config file
-var auth = require('./routes/authRoutes');
-var posts = require('./routes/postsRoutes');
-var subscribe = require('./routes/subscribeRoutes');
-var helmet = require('helmet');
-var expressSession = require('express-session');
-var cookieSession = require('cookie-session');
+import express from 'express';
+import path from 'path';
+import dbConfig     from './config/config';
+import bodyParser from 'body-parser';
+import passport  from 'passport';
+import morgan from 'morgan';
+import mongoose from 'mongoose';
+import auth from './routes/authRoutes';
+import posts from './routes/postsRoutes';
+import subscribe from './routes/subscribeRoutes';
+import helmet from 'helmet';
+import expressSession from 'express-session';
+import cookieSession from 'cookie-session';
 
+const app  = express();
 
 //Express Production Security Practice - use generic cookie names 
 app.set('trust proxy', 1); 
@@ -47,9 +48,6 @@ app.use(bodyParser.json({limit: '50mb'}));
 // log to console
 app.use(morgan('dev'));
 
-
-
-
 // Use the passport package in our application
 app.use(passport.initialize());
 
@@ -57,17 +55,16 @@ app.get('/', function(req, res) {
 	res.send('hello');
 });
 
-mongoose.connect(config.database);
+mongoose.connect(dbConfig.database);
 app.use('/api/auth', auth);
 app.use('/api/posts', posts);
 app.use('/api/subs', subscribe);
 
-
 //error handling
 app.use(function (err, req, res, next) {
-	//console.error(err.stack)
-	res.status(406).send({success: false, msg: 'Error Occurs.', error: err})
-})
+	res.status(406).send({success: false, msg: 'Error Occurs.', error: err});
+});
+
 
 module.exports = app;
 

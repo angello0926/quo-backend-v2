@@ -1,11 +1,13 @@
-const User = require('../models/User');
-var jwt         = require('jwt-simple');
-var morgan      = require('morgan');
-var mongoose    = require('mongoose');
-var passport  = require('passport');
-var config      = require('../config/config');
-var uuid        = require('node-uuid');
-var aws        = require('aws-sdk');
+import  User from '../models/User';
+import jwt         from 'jwt-simple';
+import morgan      from 'morgan';
+import mongoose    from 'mongoose';
+import passport  from 'passport';
+import config      from '../config/config';
+import uuid        from 'node-uuid';
+import aws        from 'aws-sdk';
+import validators from 'validators';
+
 const s3 = new aws.S3();
 mongoose.Promise = Promise;  
 aws.config.update({
@@ -17,6 +19,7 @@ aws.config.update({
 
 
 exports.signup = (req, res) => {
+
 	if (!req.body.email || !req.body.password) {
 		res.status(400).json({success: false, msg: 'Please pass email and password.'});
 	} else {

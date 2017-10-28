@@ -1,7 +1,8 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt');
-const Post = require('../models/post');
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import Post from '../models/post';
+
+let Schema = mongoose.Schema;
 
 var userSchema = new Schema({
 
