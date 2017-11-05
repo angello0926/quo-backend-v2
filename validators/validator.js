@@ -4,11 +4,11 @@ import _ from 'lodash';
 export function validateSignUpInput(data){
     let errors = {};
 
-    if(Validator.isNull(data.email)){
+    if(_.isNull(data.email)){
         errors.email = "This field is required";
     }
 
-    if (Validator.isNull(data.password)){
+    if (_.isNull(data.password)){
         errors.password = "This field is required";
     }
 

@@ -136,9 +136,9 @@ app.use('/api/posts', posts);
 app.use('/api/subs', subscribe);
 
 //error handling
-app.use(function (err, req, res, next) {
-	res.status(406).send({success: false, msg: 'Error Occurs.', error: err});
-});
+// app.use(function (err, req, res, next) {
+// 	if(err) res.status(406).send({success: false, msg: 'Error Occurs.', error: err});
+// });
 
 
 module.exports = app;

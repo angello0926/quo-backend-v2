@@ -2,13 +2,9 @@ import Post from '../models/Post';
 import User from '../models/User';
 import mongoose from 'mongoose';
 
-
-export class SubsController {
-	constructor(){
-		mongoose.Promise = Promise;  
-	}
-	
-	followUser (req, res){
+mongoose.Promise = Promise;  
+export default {
+	followUser: function followUser (req, res){
 		User.findOne({'_id':req.user.id})
 		.then( doc => {
 			//search whether the user to follow is followed
@@ -36,10 +32,10 @@ export class SubsController {
 		.catch( error => {
 			res.status(500).send({success: false, message:'Cannot Follow User'});
 		});
-	}
+	},
 	
 	
-	showSubs (req, res){
+	showSubs: function showSubs (req, res){
 		Post
 			.find({'_creator': {$in :req.user.following}})
 			.populate('_creator')

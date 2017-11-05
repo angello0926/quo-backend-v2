@@ -5,22 +5,18 @@ import mongoose    from 'mongoose';
 import Post from '../models/Post';
 import User from '../models/User';
 
-export class PostController {
-	constructor(){
-		this.s3 = new aws.S3();
-		mongoose.Promise = Promise;  
-		//aws s3 config
-		aws.config.update({
-			credentials: new aws.CognitoIdentityCredentials({
-				IdentityPoolId: 'us-east-1-foo-bar'
-			}),
-			region: 'us-east-1'
-		});
+const s3 = new aws.S3();
+mongoose.Promise = Promise;  
+//aws s3 config
+aws.config.update({
+	credentials: new aws.CognitoIdentityCredentials({
+		IdentityPoolId: 'us-east-1-foo-bar'
+	}),
+	region: 'us-east-1'
+});
 		
-	}
-
-	
-	imageupload(req, res) {
+export default {
+	imageupload: function imageupload(req, res) {
 		const unique = uuid.v1();
 		const buf = new Buffer(req.body.imageBinary.replace(/^data:image\/\w+;base64,/, ''),'base64');
 		const data = {
@@ -30,7 +26,7 @@ export class PostController {
 			ContentEncoding: 'base64',
 			ContentType: 'image/png'
 		};
-		this.s3.putObject(data, function(err, data){
+		s3.putObject(data, function(err, data){
 			if (err) {
 				res.status(400).send('Error uploading data: ', data);
 			} else {
@@ -42,15 +38,14 @@ export class PostController {
 				req.user.posts.push(post1);
 				req.user.save();
 				const urlParams = {Bucket: 'quo-mobile', Key: unique+'.png'};
-				this.s3.getSignedUrl('getObject', urlParams, function(err, url){
+				s3.getSignedUrl('getObject', urlParams, function(err, url){
 					res.status(200).json({imgurl: url, img_name: unique+'.png'});
 				});
 			}
 		});
-	}
+	},
 	
-	
-	submission (req, res) {
+	submission: function submission (req, res) {
 		User
 			.findOne({'_id': req.user.id})
 			.populate('posts')
@@ -65,9 +60,9 @@ export class PostController {
 				})
 			)
 			.catch(err => res.status(500).json({success: false, message: "Error occurs."}));
-	}
-	
-	getAllFeeds (req, res) {
+	},
+
+	getAllFeeds: function getAllFeeds (req, res) {
 		let postFollowButton = [];
 		Post
 			.find({'published':true})
@@ -86,9 +81,9 @@ export class PostController {
 				res.status(200).json({posts: posts, followInfo: postFollowButton});
 			}))
 			.catch(err => res.status(500).json({success: false, message: "Error occurs."}));
-	}
-	
-	getPostbyImgId(req, res) {
+	},
+
+	getPostbyImgId: function getPostbyImgId(req, res) {
 		Post
 			.find({'quote_pic':req.params.imgId})
 			.populate('_creator')
@@ -97,9 +92,9 @@ export class PostController {
 				res.status(200).json({post: entry});
 			});
 	
-	}
+	},
 	
-	getPostByPostId(req, res) {
+	getPostByPostId : function getPostByPostId(req, res){
 		Post
 			.find({'_id':req.postId})
 			.populate('_creator')
@@ -107,11 +102,10 @@ export class PostController {
 			.catch( err => {
 				res.status(500).json({success: false, message: "Error occurs."});
 			});
+	},
 	
-	}
 	
-	
-	getReqUserPosts (req, res) {
+	getReqUserPosts: function getReqUserPosts (req, res) {
 		const arraypost = req.user.posts;
 		const num_p = arraypost.length;
 		const following = req.user.following;
@@ -127,9 +121,9 @@ export class PostController {
 					posts: posts , postno: num_p , subscribe: num_f , followers: num_ff});
 			})
 			.catch(err => res.status(500).json({success: false, message: "Error occurs."}));
-	}
+	},
 	
-	deletePost (req, res) {
+	deletePost :function deletePost (req, res) {
 		const quoteFilename = req.params.name;
 		Post
 			.findOne({'quote_pic': quoteFilename })
@@ -144,4 +138,7 @@ export class PostController {
 				err.status(500).json({success: false, message: "Error occurs."});	
 			});
 	}
-}
+
+};
+	
+	
