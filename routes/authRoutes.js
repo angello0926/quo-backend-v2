@@ -1,14 +1,15 @@
-import  express from 'express';
-let router = express.Router();
+import express from 'express';
+import { AuthController  } from '../controllers/authController';
 
-import authController from '../controllers/authController';
-
-/* Create Account */
-router.post('/signup', authController.signup);
-
-/* Login */
-router.post('/authenticate', authController.authenticate);
-
-/*get member info */
-router.get('/memberinfo', authController.memberinfo);
-module.exports = router;
+export default function (){
+    let router = express.Router();
+    /* Create Account */
+    router.post('/signup', AuthController.signup);
+    
+    /* Login */
+    router.post('/authenticate', AuthController.authenticate);
+    
+    /*get member info */
+    router.get('/memberinfo', AuthController.memberinfo);
+    
+}

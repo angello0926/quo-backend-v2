@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import Post from '../models/post';
+import Post from './Post';
 
 let Schema = mongoose.Schema;
 
-var userSchema = new Schema({
+const userSchema = new Schema({
 
 	email: {type: String, unique:true},
 	password: {type: String},
@@ -32,7 +32,7 @@ var userSchema = new Schema({
 
 
 userSchema.pre('save', function (next) {
-	var user = this;
+	const user = this;
 	if (this.isModified('password') || this.isNew) {
 		bcrypt.genSalt(10, function (err, salt) {
 			if (err) {
@@ -60,6 +60,4 @@ userSchema.methods.comparePassword = function (passw, cb) {
 	});
 };
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+export default mongoose.model('User', userSchema);

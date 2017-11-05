@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import http from 'http';
+import cors from 'cors';
 import dbConfig     from './config/config';
 import bodyParser from 'body-parser';
 import passport  from 'passport';
@@ -12,7 +13,7 @@ import subscribe from './routes/subscribeRoutes';
 import helmet from 'helmet';
 import expressSession from 'express-session';
 import cookieSession from 'cookie-session';
-var debug = require('debug')('testapp:server');
+const debug = require('debug')('testapp:server');
 const app  = express();
 
 
@@ -20,14 +21,14 @@ const app  = express();
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '4000');
+const port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -44,7 +45,7 @@ console.log('app running on',port);
  */
 
 function normalizePort(val) {
-	var port = parseInt(val, 10);
+	const port = parseInt(val, 10);
 
 	if (isNaN(port)) {
 		// named pipe
@@ -68,7 +69,7 @@ function onError(error) {
 		throw error;
 	}
 
-	var bind = typeof port === 'string'
+	const bind = typeof port === 'string'
 		? 'Pipe ' + port
 		: 'Port ' + port;
 
@@ -92,8 +93,8 @@ function onError(error) {
  */
 
 function onListening() {
-	var addr = server.address();
-	var bind = typeof addr === 'string'
+	const addr = server.address();
+	const bind = typeof addr === 'string'
 		? 'pipe ' + addr
 		: 'port ' + addr.port;
 	debug('Listening on ' + bind);
@@ -109,20 +110,6 @@ app.use(expressSession({
 	name: 'sessionId'
 }));
 
-//Express Production Security Practice - Set cookie security options
-// var expiryDate = new Date(Date.now() + 60 * 60 * 2000); // 1 hour
-// app.use(cookieSession({
-// 	name: 'quosession',
-// 	keys: ['key1', 'key2'],
-// 	cookie: {
-// 		secure: true,
-// 		httpOnly: true,
-// 		domain: 'readnquo.com',
-// 		path: 'foo/bar',
-// 		expires: expiryDate
-// 	}
-// }));
-
 
 //Express Production Security Practice
 app.use(helmet());
@@ -135,6 +122,7 @@ app.use(bodyParser.json({limit: '50mb'}));
 // log to console
 app.use(morgan('dev'));
 
+app.use(cors());
 // Use the passport package in our application
 app.use(passport.initialize());
 

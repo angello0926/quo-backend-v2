@@ -25,6 +25,25 @@ describe('authentication api', function() {
         });
     });
 
+    let invalidUser ={
+        email: null,
+        password: ''
+    };
+    it('should fail to create an account', function() {
+        return api
+        .post('/api/auth/signup')
+        .send(invalidUser)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .then(res => {
+            res.status.should.equal(201);
+            res.body.success.should.equal(true);
+        })
+        .catch(err =>{
+            console.log(err);
+        });
+    });
+
 
     let authenticatedUser = {
         email: 'angelyukyu+haha@gmail.com',

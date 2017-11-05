@@ -1,4 +1,4 @@
-var config = {
+const config = {
     env: process.env.NODE_ENV || 'production',
     logging: false,
     secrets: {
